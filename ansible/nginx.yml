@@ -1,0 +1,23 @@
+---
+- name: Install nginx and update os
+  hosts: all
+  become: yes
+  
+  tasks:
+    - name: Обновление ВСЕХ установленных пакетов
+      apt:
+        upgrade: dist
+        autoremove: yes
+        autoclean: yes
+
+    - name: Istall nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+    
+    - name: Start Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes

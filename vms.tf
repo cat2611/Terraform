@@ -4,6 +4,10 @@ data "yandex_compute_image" "ubuntu_2204_lts" {
   family = "ubuntu-2204-lts"
 }
 
+data "yandex_compute_image" "debian_11" {
+  family = "debian-11"  # Семейство образов Debian 11
+}
+
 resource "yandex_compute_instance" "bastion" {
   name        = "bastion" #Имя ВМ в облачной консоли
   hostname    = "bastion" #формирует FDQN имя хоста, без hostname будет сгенрировано случаное имя.

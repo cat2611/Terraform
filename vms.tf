@@ -124,7 +124,7 @@ resource "yandex_compute_instance" "zabbix" {
 
   boot_disk {
     initialize_params {
-      image_id = fd8cjqeo1nor91igv3bf
+      image_id = data.yandex_compute_image.debian_11.id
       type     = "network-hdd"
       size     = 20
     }

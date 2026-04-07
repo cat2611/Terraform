@@ -109,6 +109,42 @@ resource "yandex_compute_instance" "web_b" {
   }
 }
 
+
+resource "yandex_compute_instance" "zabbix" {
+  name        = "zabbix" #Имя ВМ в облачной консоли
+  hostname    = "zabbix" #формирует FDQN имя хоста, без hostname будет сгенрировано случаное имя.
+  platform_id = "standard-v3"
+  zone        = "ru-central1-b" #зона ВМ должна совпадать с зоной subnet!!!
+
+  resources {
+    cores         = var.test.cores
+    memory        = 4
+    core_fraction = 20
+  }
+
+  boot_disk {
+    initialize_params {
+      image_id = fd8cjqeo1nor91igv3bf
+      type     = "network-hdd"
+      size     = 20
+    }
+  }
+
+  metadata = {
+    user-data          = file("./cloud-init.yml")
+    serial-port-enable = 1
+  }
+
+  scheduling_policy { preemptible = true }
+
+  network_interface {
+    subnet_id          = yandex_vpc_subnet.develop_b.id
+    nat                = false
+    security_group_ids = [yandex_vpc_security_group.LAN.id, yandex_vpc_security_group.web_sg.id]
+
+  }
+}
+
 resource "yandex_compute_instance" "wrong_b" {
   name        = "wrong-hostname" #Имя ВМ в облачной консоли
   platform_id = "standard-v3"
